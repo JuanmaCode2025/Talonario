@@ -136,15 +136,7 @@
               </div>
             </div>
             <div class="payment-info">
-              <h4>Estado de Pago</h4>
-              <p>
-                <span>Monto Pagado:</span>
-                <span
-                  >₡{{
-                    formatDecimal(boletas[boletaSeleccionada]?.montoPagado || 0)
-                  }}</span
-                >
-              </p>
+              
               <p v-if="boletas[boletaSeleccionada]?.status === 'reserved'">
                 <span>Pendiente por Pagar:</span>
                 <span
@@ -240,8 +232,8 @@
               </button>
               <button
                 v-if="
-                  boletas[boletaSeleccionada]?.status === 'available' ||
-                  boletas[boletaSeleccionada]?.status === 'reserved'
+                  boletas[boletaSeleccionada]?.status === 'available' 
+                  
                 "
                 @click="assignTicket('paid')"
                 class="btn primary"
@@ -264,7 +256,7 @@
     </div>
 
     <div v-if="showTicketsTableModal" class="modal-overlay">
-      <div class="modal-container" >
+      <div class="modal-container-tabla">
         <div class="modal-header">
           <h3>Tabla de Boletas Asignadas</h3>
           <button @click="closeTicketsTableModal" class="close-btn">
@@ -387,33 +379,49 @@
 
     <div class="main-panel" v-if="!showWelcomeModal && !showDataModal">
       <header
-        class="panel-header"
-        :style="{
-          backgroundColor: themeColors.headerBg,
-          color: themeColors.headerText,
-        }"
+    class="panel-header"
+    :style="{
+      backgroundColor: themeColors.headerBg,
+      color: themeColors.headerText,
+    }"
+  >
+    <div class="header-left">
+      <h1>{{ sorteo || "Nombre de la Rifa" }}</h1>
+      <div
+        class="badge active"
+        :style="{ backgroundColor: themeColors.success }"
       >
-        <div class="header-left">
-          <h1>{{ sorteo || "Nombre de la Rifa" }}</h1>
-          <div
-            class="badge active"
-            :style="{ backgroundColor: themeColors.success }"
-          >
-            Activo
-          </div>
-        </div>
-        <div class="header-center">
-          <button class="tab-btn active">
-            <span>📋</span>
-            <span>Talonario</span>
-          </button>
-        </div>
-        <div class="header-right">
-          <button class="settings-btn" @click="openSettingsModal">
-            <span>⚙️</span>
-          </button>
-        </div>
-      </header>
+        Activo
+      </div>
+    </div>
+
+    <!-- Botón hamburguesa visible solo en móvil -->
+    <button class="hamburger-btn" @click="showMenu = !showMenu">☰</button>
+
+    <!-- Menú visible solo en móvil -->
+    <div class="mobile-menu" v-if="showMenu">
+      <button class="tab-btn active">
+        <span>📋</span>
+        <span>Talonario</span>
+      </button>
+      <button class="settings-btn" @click="openSettingsModal">
+        <span>⚙️</span>
+      </button>
+    </div>
+
+    <!-- Menú para pantallas grandes -->
+    <div class="header-center">
+      <button class="tab-btn active">
+        <span>📋</span>
+        <span>Talonario</span>
+      </button>
+    </div>
+    <div class="header-right">
+      <button class="settings-btn" @click="openSettingsModal">
+        <span>⚙️</span>
+      </button>
+    </div>
+  </header>
 
       <div class="body-principal">
         <div class="information">
@@ -1017,6 +1025,9 @@ const resetThemeSettings = () => {
     timer: 1500,
   });
 };
+
+
+const showMenu = ref(false)
 </script>
 
 
@@ -1073,10 +1084,11 @@ const resetThemeSettings = () => {
 .body-principal {
   display: grid;
   grid-template-columns: 0.5fr 1fr;
-  border: 2px solid blue;
+ 
 }
 
-.information{border: 2px solid yellow;}
+
+
 
 .badge.active {
   background-color: var(--primary-color);
@@ -1147,7 +1159,7 @@ const resetThemeSettings = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
+  padding: 10px 20px;
 }
 
 .close-btn {
@@ -1223,8 +1235,7 @@ button {
 
 /* Estilos para el panel principal */
 .main-panel {
-  border: 2px solid red;
-  background: white;
+   background: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -1279,12 +1290,12 @@ button {
   border: 5px solid black;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-   margin: 5px;
+  margin: 5px;
 }
 
-.card-header { 
+.card-header {
   padding: 10px;
   background: #f8f9fa;
   border-bottom: 1px solid #eee;
@@ -1299,7 +1310,6 @@ button {
 .data-row {
   display: flex;
   justify-content: space-between;
-  
 }
 
 .data-label {
@@ -1334,7 +1344,6 @@ button {
   align-items: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease;
- 
 }
 
 .welcome-modal-content,
@@ -1394,12 +1403,13 @@ button {
 
 /* Modal de formulario y boletas */
 
-.form-modal-content{
- max-width: 500px;
- padding: 10px;
+.form-modal-content {
+  max-width: 500px;
+  padding: 10px;
 }
 
- .modal-container-tabla {
+.modal-container-tabla {
+  background-color: white;
   width: 900%;
   max-width: 900px;
 }
@@ -1431,8 +1441,6 @@ button {
 }
 
 .modal-status {
-  position: absolute;
-  right: 50px;
   padding: 3px 10px;
   border-radius: 20px;
   font-size: 12px;
@@ -1636,10 +1644,10 @@ button {
 /* Estadísticas */
 .analis {
   padding: 10px;
-   border: 5px solid black;
+  border: 5px solid black;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   margin: 5px;
 }
@@ -1664,7 +1672,6 @@ button {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
-
 }
 
 .grid_card .card h2 {
@@ -1688,11 +1695,11 @@ button {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
   gap: 10px;
-  padding: 5px;
+  padding: 20px;
 }
 
 .number {
-  width: 70px;
+  width: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1784,5 +1791,103 @@ table tbody tr.paid {
   border-radius: 8px;
   cursor: pointer;
   padding: 0; /* Remove default padding for color input */
+}
+
+
+/* Hamburguesa */ 
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 5px;
+  color: white;
+}
+
+.hamburger-btn {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+}
+
+
+@media (max-width: 430px) {
+  .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5px;
+  border-bottom: 1px solid #eee;
+}
+ .body-principal{
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+ }
+ .card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+ .analis {
+  padding: 5px;
+  border: 5px solid black;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 1px;
+}
+.grid_card {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 15px;
+  margin-bottom: 20px; /* Added space for the new button */
+}
+ .talonarionumber {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 10px;
+  padding: 5px;
+}
+ .header-center,
+  .header-right {
+    display: none;
+  }
+
+  .hamburger-btn {
+      display: block !important;
+  }
+
+  .mobile-menu {
+    display: flex;
+  }
+
+  .panel-header {
+    align-items: flex-start;
+  }
 }
 </style>
