@@ -1072,7 +1072,7 @@ const resetThemeSettings = () => {
 }
 .body-principal {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 0.5fr 1fr;
   border: 2px solid blue;
 }
 
@@ -1399,10 +1399,14 @@ button {
  padding: 10px;
 }
 
-
-.modal-container {
+ .modal-container-tabla {
   width: 900%;
   max-width: 900px;
+}
+
+.modal-container {
+  width: 500%;
+  max-width: 500px;
 }
 
 .form-modal-content .modal-header,
