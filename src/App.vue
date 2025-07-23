@@ -334,9 +334,9 @@
         <!-- Menú visible solo en móvil -->
         <div class="mobile-menu" v-if="showMenu">
           <div id="title ">
-            <span>Talonario</span>
+            <span>Talonariofdgdfgdfgdgdfgdgd</span>
           </div>
-          <button class="settings-btn" @click="openSettingsModal">
+          <button  @click="openSettingsModal">
             <span>⚙️</span>
           </button>
         </div>
@@ -349,9 +349,9 @@
           </div>
         </div>
         <div class="header-right">
-          <button class="settings-btn" @click="openSettingsModal">
-            <span>⚙️</span>
-          </button>
+         <button @click="openSettingsModal">
+           ⚙️
+         </button>
         </div>
       </header>
 
@@ -394,7 +394,10 @@
             </div>
           </div>
           <div class="analis">
-            <h3>Estadísticas Del talonario</h3>
+            <div class="card-header">
+               <h4>Estadísticas Del talonario</h4>
+            </div>
+           
             <section class="grid_card">
               <div class="card">
                 <h2>{{ cantidadBoletas }}</h2>
@@ -1005,8 +1008,7 @@ const showMenu = ref(false)
 .panel-header {
   background-color: var(--header-bg-color);
   color: var(--header-text-color);
-  border-bottom: 1px solid #eee;
-  /* Keep a subtle border */
+  border: 2px solid black;
 }
 
 .body-principal {
@@ -1178,7 +1180,6 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  border-bottom: 1px solid #eee;
 }
 
 .header-left {
@@ -1231,6 +1232,8 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .card-body {
@@ -1253,8 +1256,6 @@ button {
 
 .card-footer {
   padding: 15px;
-  background: #f8f9fa;
-  border-top: 1px solid #eee;
   text-align: right;
 }
 
@@ -1421,13 +1422,6 @@ button {
   margin-bottom: 20px;
 }
 
-.participant-info h4 {
-  margin-top: 0;
-  color: #2c3e50;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
 .info-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1576,8 +1570,7 @@ button {
 }
 
 /* Estadísticas */
-.analis {
-  padding: 10px;
+.analis {  
   border: 5px solid black;
   background: white;
   border-radius: 8px;
@@ -1585,18 +1578,13 @@ button {
   overflow: hidden;  
 }
 
-.analis h3 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #2c3e50;
-  font-size: 18px;
-}
 
 .grid_card {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+  padding:  10px;
   /* Added space for the new button */
 }
 
@@ -1658,7 +1646,7 @@ background-color:
 
 .table-button-container {
   text-align: center;
-  margin-top: 20px;
+  padding: 10px;
 }
 
 /* Estilos para las boletas */
@@ -1811,7 +1799,7 @@ table tbody tr.paid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     /* Added space for the new button */
   }
 }
@@ -1822,7 +1810,6 @@ table tbody tr.paid {
     justify-content: space-between;
     align-items: center;
     padding: 10px 5px;
-    border-bottom: 1px solid #eee;
   }
 
   .body-principal {
@@ -1851,7 +1838,7 @@ table tbody tr.paid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     /* Added space for the new button */
   }
 
@@ -1905,7 +1892,6 @@ table tbody tr.paid {
     justify-content: space-between;
     align-items: center;
     padding: 10px 5px;
-    border-bottom: 1px solid #eee;
   }
 
   .body-principal {
