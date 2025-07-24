@@ -22,8 +22,12 @@
             <label>Ingrese la Cantidad del Premio</label>
             <div class="input-with-icon">
               <span>🏆</span>
-              <input v-model="premioDisplay" type="text" placeholder="No se valores Negativos"
-                @input="formatCurrency($event, 'premio')" />
+              <input
+                v-model="premioDisplay"
+                type="text"
+                placeholder="No se valores Negativos"
+                @input="formatCurrency($event, 'premio')"
+              />
             </div>
           </div>
 
@@ -31,8 +35,12 @@
             <label>Ingrese el Valor de la Boleta</label>
             <div class="input-with-icon">
               <span>🎫</span>
-              <input v-model="precioUnitarioDisplay" type="text" placeholder="No se valores Negativos"
-                @input="formatCurrency($event, 'precioUnitario')" />
+              <input
+                v-model="precioUnitarioDisplay"
+                type="text"
+                placeholder="No se valores Negativos"
+                @input="formatCurrency($event, 'precioUnitario')"
+              />
             </div>
           </div>
 
@@ -81,7 +89,10 @@
     </div>
 
     <div v-if="showAssignTicketModal" class="modal-overlay">
-      <div class="modal-container" :class="`${boletas[boletaSeleccionada]?.status || 'available'}-modal`">
+      <div
+        class="modal-container"
+        :class="`${boletas[boletaSeleccionada]?.status || 'available'}-modal`"
+      >
         <div class="modal-header">
           <h3>
             Asignar Boleta #{{
@@ -96,9 +107,11 @@
           </button>
         </div>
         <div class="modal-body">
-          <div v-if="
-            boletas[boletaSeleccionada]?.status !== 'available' && !isEditing
-          ">
+          <div
+            v-if="
+              boletas[boletaSeleccionada]?.status !== 'available' && !isEditing
+            "
+          >
             <div class="participant-info">
               <h4>Datos del Participante</h4>
               <div class="info-grid">
@@ -123,47 +136,74 @@
               </div>
             </div>
             <div class="payment-info">
-
               <p v-if="boletas[boletaSeleccionada]?.status === 'reserved'">
                 <span>Pendiente por Pagar:</span>
-                <span>₡{{
-                  formatDecimal(
-                    precioUnitario -
-                    (boletas[boletaSeleccionada]?.montoPagado || 0)
-                  )
-                }}</span>
+                <span
+                  >₡{{
+                    formatDecimal(
+                      precioUnitario -
+                        (boletas[boletaSeleccionada]?.montoPagado || 0)
+                    )
+                  }}</span
+                >
               </p>
             </div>
           </div>
 
-          <div v-if="
-            boletas[boletaSeleccionada]?.status === 'available' || isEditing
-          " class="form-container">
+          <div
+            v-if="
+              boletas[boletaSeleccionada]?.status === 'available' || isEditing
+            "
+            class="form-container"
+          >
             <div class="form-group">
               <label for="nombre">Nombre del Participante</label>
               <div class="input-with-icon">
                 <span>👤</span>
-                <input type="text" id="nombre" v-model="currentTicketData.nombre" placeholder="Nombre completo" />
+                <input
+                  type="text"
+                  id="nombre"
+                  v-model="currentTicketData.nombre"
+                  placeholder="Nombre completo"
+                />
               </div>
             </div>
             <div class="form-group">
               <label for="telefono">Teléfono</label>
               <div class="input-with-icon">
                 <span>📱</span>
-                <input type="text" id="telefono" v-model="currentTicketData.telefono" placeholder="Número de teléfono"
-                  maxlength="10" inputmode="numeric"
-                  @input="currentTicketData.telefono = currentTicketData.telefono.replace(/\D/g, '').slice(0, 10)" />
+                <input
+                  type="text"
+                  id="telefono"
+                  v-model="currentTicketData.telefono"
+                  placeholder="Número de teléfono"
+                  maxlength="10"
+                  inputmode="numeric"
+                  @input="
+                    currentTicketData.telefono = currentTicketData.telefono
+                      .replace(/\D/g, '')
+                      .slice(0, 10)
+                  "
+                />
               </div>
             </div>
             <div class="form-group">
               <label for="direccion">Direccion</label>
               <div class="input-with-icon">
                 <span>🌏</span>
-                <input type="text" id="direccion" v-model="currentTicketData.direccion" placeholder="Direccion" />
+                <input
+                  type="text"
+                  id="direccion"
+                  v-model="currentTicketData.direccion"
+                  placeholder="Direccion"
+                />
               </div>
             </div>
           </div>
-          <div v-if="isEditing" style="display: flex; gap: 10px; justify-content: end;">
+          <div
+            v-if="isEditing"
+            style="display: flex; gap: 10px; justify-content: end"
+          >
             <button @click="isEditing = false" class="btn secondary">
               <span>✕</span>
               <span>Cancelar</span>
@@ -173,32 +213,48 @@
               <span>Guardar Cambios</span>
             </button>
           </div>
-          <div class="action-buttons">;
+          <div class="action-buttons">
+            ;
 
-            <div style="display: flex; gap: 10px;"> <!--v-else -->
-              <button v-if="boletas[boletaSeleccionada]?.status === 'available'" @click="assignTicket('reserved')"
-                class="btn secondary">
+            <div style="display: flex; gap: 10px">
+              <!--v-else -->
+              <button
+                v-if="boletas[boletaSeleccionada]?.status === 'available'"
+                @click="assignTicket('reserved')"
+                class="btn secondary"
+              >
                 <span>🔖</span>
                 <span>Apartar</span>
               </button>
-              <button v-if="boletas[boletaSeleccionada]?.status === 'reserved'" @click="markAsPaid" class="btn success">
+              <button
+                v-if="boletas[boletaSeleccionada]?.status === 'reserved'"
+                @click="markAsPaid"
+                class="btn success"
+              >
                 <span>✅</span>
                 <span>Marcar como Pagada</span>
               </button>
-              <button v-if="boletas[boletaSeleccionada]?.status !== 'available'" @click="enableEditMode"
-                class="btn primary">
+              <button
+                v-if="boletas[boletaSeleccionada]?.status !== 'available'"
+                @click="enableEditMode"
+                class="btn primary"
+              >
                 <span>✏️</span>
                 <span>Editar Datos</span>
               </button>
-              <button v-if="
-                boletas[boletaSeleccionada]?.status === 'available'
-
-              " @click="assignTicket('paid')" class="btn primary">
+              <button
+                v-if="boletas[boletaSeleccionada]?.status === 'available'"
+                @click="assignTicket('paid')"
+                class="btn primary"
+              >
                 <span>💲</span>
                 <span>Asignar y Pagar</span>
               </button>
-              <button v-if="boletas[boletaSeleccionada]?.status !== 'available'" @click="releaseTicket"
-                class="btn danger">
+              <button
+                v-if="boletas[boletaSeleccionada]?.status !== 'available'"
+                @click="releaseTicket"
+                class="btn danger"
+              >
                 <span>↩️</span>
                 <span>Liberar Boleta</span>
               </button>
@@ -230,7 +286,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(ticket, index) in sortedBoletasForTable" :key="index" :class="ticket.status">
+                <tr
+                  v-for="(ticket, index) in sortedBoletasForTable"
+                  :key="index"
+                  :class="ticket.status"
+                >
                   <td>#{{ ticket.id }}</td>
                   <td>{{ ticket.status }}</td>
                   <td>{{ ticket.nombre }}</td>
@@ -243,7 +303,7 @@
                 <tr>
                   <td></td>
                   <td></td>
-                  <td>Total : </td>
+                  <td>Total :</td>
                   <td>{{ SumaMontosPagados }}</td>
                   <td></td>
                   <td></td>
@@ -251,7 +311,7 @@
                 <tr>
                   <td></td>
                   <td></td>
-                  <td>Premio : </td>
+                  <td>Premio :</td>
                   <td>{{ premio }}</td>
                   <td></td>
                   <td></td>
@@ -280,15 +340,27 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="primaryColor">Color Principal</label>
-            <input type="color" id="primaryColor" v-model="themeColors.primary" />
+            <input
+              type="color"
+              id="primaryColor"
+              v-model="themeColors.primary"
+            />
           </div>
           <div class="form-group">
             <label for="secondaryColor">Color Secundario</label>
-            <input type="color" id="secondaryColor" v-model="themeColors.secondary" />
+            <input
+              type="color"
+              id="secondaryColor"
+              v-model="themeColors.secondary"
+            />
           </div>
           <div class="form-group">
             <label for="successColor">Color Éxito</label>
-            <input type="color" id="successColor" v-model="themeColors.success" />
+            <input
+              type="color"
+              id="successColor"
+              v-model="themeColors.success"
+            />
           </div>
           <div class="form-group">
             <label for="dangerColor">Color Peligro</label>
@@ -296,11 +368,19 @@
           </div>
           <div class="form-group">
             <label for="headerBgColor">Color de Fondo del Encabezado</label>
-            <input type="color" id="headerBgColor" v-model="themeColors.headerBg" />
+            <input
+              type="color"
+              id="headerBgColor"
+              v-model="themeColors.headerBg"
+            />
           </div>
           <div class="form-group">
             <label for="headerTextColor">Color de Texto del Encabezado</label>
-            <input type="color" id="headerTextColor" v-model="themeColors.headerText" />
+            <input
+              type="color"
+              id="headerTextColor"
+              v-model="themeColors.headerText"
+            />
           </div>
           <div class="action-buttons">
             <button @click="saveThemeSettings" class="btn primary">
@@ -317,13 +397,19 @@
     </div>
 
     <div class="main-panel" v-if="!showWelcomeModal && !showDataModal">
-      <header class="panel-header" :style="{
-        backgroundColor: themeColors.headerBg,
-        color: themeColors.headerText,
-      }">
-        <div class="header-left" style="padding-top: 10px;">
+      <header
+        class="panel-header"
+        :style="{
+          backgroundColor: themeColors.headerBg,
+          color: themeColors.headerText,
+        }"
+      >
+        <div class="header-left" style="padding-top: 10px">
           <h1>{{ sorteo || "Nombre de la Rifa" }}</h1>
-          <div class="badge active" :style="{ backgroundColor: themeColors.success }">
+          <div
+            class="badge active"
+            :style="{ backgroundColor: themeColors.success }"
+          >
             Activo
           </div>
         </div>
@@ -334,9 +420,9 @@
         <!-- Menú visible solo en móvil -->
         <div class="mobile-menu" v-if="showMenu">
           <div id="title ">
-            <span>Talonariofdgdfgdfgdgdfgdgd</span>
+            <span>Talonario</span>
           </div>
-          <button  @click="openSettingsModal">
+          <button style="border-radu" @click="openSettingsModal">
             <span>⚙️</span>
           </button>
         </div>
@@ -344,14 +430,11 @@
         <!-- Menú para pantallas grandes -->
         <div class="header-center">
           <div id="title">
-            
             <span>Talonario</span>
           </div>
         </div>
         <div class="header-right">
-         <button @click="openSettingsModal">
-           ⚙️
-         </button>
+          <button @click="openSettingsModal">⚙️</button>
         </div>
       </header>
 
@@ -360,18 +443,23 @@
           <div v-if="datosGuardados" class="data-card">
             <div class="card-header">
               <h4>Informacion del Sorteo</h4>
-              <div class="badge success" :style="{ backgroundColor: themeColors.success }">
+              <div
+                class="badge success"
+                :style="{ backgroundColor: themeColors.success }"
+              >
                 Guardado
               </div>
             </div>
             <div class="card-body">
               <div class="data-row">
                 <span class="data-label">Premio:</span>
-                <span class="data-value">₡{{ formatDecimal(premio) }}</span>
+                <span class="data-value">${{ formatDecimal(premio) }}</span>
               </div>
               <div class="data-row">
                 <span class="data-label">Valor boleta:</span>
-                <span class="data-value">₡{{ formatDecimal(precioUnitario) }}</span>
+                <span class="data-value"
+                  >${{ formatDecimal(precioUnitario) }}</span
+                >
               </div>
               <div class="data-row">
                 <span class="data-label">Lotería:</span>
@@ -395,9 +483,9 @@
           </div>
           <div class="analis">
             <div class="card-header">
-               <h4>Estadísticas Del talonario</h4>
+              <h4>Estadísticas Del talonario</h4>
             </div>
-           
+
             <section class="grid_card">
               <div class="card">
                 <h2>{{ cantidadBoletas }}</h2>
@@ -423,13 +511,19 @@
               </button>
             </div>
           </div>
+          
         </div>
 
         <div class="talonarionumber">
-          <button v-for="i in Array.from(
-            { length: cantidadBoletas },
-            (_, index) => index
-          )" :key="i" :class="['number', boletas[i]?.status || 'available']" @click="openAssignTicketModal(i)">
+          <button
+            v-for="i in Array.from(
+              { length: cantidadBoletas },
+              (_, index) => index
+            )"
+            :key="i"
+            :class="['number', boletas[i]?.status || 'available']"
+            @click="openAssignTicketModal(i)"
+          >
             #{{ i.toString().padStart(boletaDigits, "0") }}
           </button>
         </div>
@@ -443,6 +537,33 @@ import { ref, computed, onMounted } from "vue";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+
+// const numberWin = ref(0)
+// const showAnimation = ref(false)
+// const isGenerating = ref(false)
+
+// Suponiendo que cantidadBoletas viene de props o store
+ // Cambia esto según tu implementación
+
+// function generarnumber() {
+//   if (cantidadBoletas.value <= 0) return
+  
+//   isGenerating.value = true
+//   showAnimation.value = true
+  
+//   // Efecto de cuenta regresiva
+//   let counter = 0
+//   const interval = setInterval(() => {
+//     numberWin.value = Math.floor(Math.random() * cantidadBoletas.value) + 1
+//     counter++
+    
+//     if (counter > 10) {
+//       clearInterval(interval)
+//       isGenerating.value = false
+//       setTimeout(() => showAnimation.value = false, 2000)
+//     }
+//   }, 100)
+// }
 
 // --- Estado de los modales ---
 const showWelcomeModal = ref(true);
@@ -685,8 +806,9 @@ const assignTicket = (status) => {
     icon: "success",
     title: `Boleta #${boletaSeleccionada.value
       .toString()
-      .padStart(boletaDigits.value, "0")} ha sido ${status === "reserved" ? "apartada" : "pagada"
-      }!`,
+      .padStart(boletaDigits.value, "0")} ha sido ${
+      status === "reserved" ? "apartada" : "pagada"
+    }!`,
     showConfirmButton: false,
     timer: 1500,
   });
@@ -950,8 +1072,7 @@ const resetThemeSettings = () => {
   });
 };
 
-
-const showMenu = ref(false)
+const showMenu = ref(false);
 </script>
 
 
@@ -962,6 +1083,31 @@ const showMenu = ref(false)
 
 
 <style scoped>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .app-container {
   font-family: "Arial", sans-serif;
   margin: 0 auto;
@@ -1014,11 +1160,7 @@ const showMenu = ref(false)
 .body-principal {
   display: grid;
   grid-template-columns: 0.5fr 1fr;
-
 }
-
-
-
 
 .badge.active {
   background-color: var(--primary-color);
@@ -1214,8 +1356,6 @@ button {
   cursor: pointer;
 }
 
-
-
 /* Estilos para las tarjetas de datos */
 .data-card {
   border: 5px solid black;
@@ -1309,9 +1449,11 @@ button {
 }
 
 .welcome-modal-content button {
-  background: linear-gradient(to right,
-      var(--primary-color),
-      var(--success-color));
+  background: linear-gradient(
+    to right,
+    var(--primary-color),
+    var(--success-color)
+  );
   color: white;
   border: none;
   padding: 12px 30px;
@@ -1389,8 +1531,8 @@ button {
 .paid-modal .modal-status {
   background-color: var(--success-color);
 }
-#title{
-   font-size: 2.5rem;
+#title {
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2c3e50;
   line-height: 1.2;
@@ -1507,7 +1649,8 @@ button {
 .input-with-icon input:focus,
 .select-with-icon select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 30%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color) 30%, transparent);
   outline: none;
 }
 
@@ -1570,21 +1713,20 @@ button {
 }
 
 /* Estadísticas */
-.analis {  
+.analis {
   border: 5px solid black;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;  
+  overflow: hidden;
 }
-
 
 .grid_card {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-bottom: 5px;
-  padding:  10px;
+  padding: 10px;
   /* Added space for the new button */
 }
 
@@ -1610,39 +1752,28 @@ button {
   font-size: 12px;
 }
 
-.information{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.information {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   padding: 20px;
 }
 
-
 #pagadas {
-  background-color:
-    color-mix(in srgb, var(--success-color) 20%, white);
-  border-color:
-    color-mix(in srgb, var(--success-color) 50%, white);
-  color:
-    color-mix(in srgb, var(--success-color) 90%, black);
+  background-color: color-mix(in srgb, var(--success-color) 20%, white);
+  border-color: color-mix(in srgb, var(--success-color) 50%, white);
+  color: color-mix(in srgb, var(--success-color) 90%, black);
 }
 #apartadas {
-background-color: 
- color-mix(in srgb, var(--danger-color) 20%, white);
-    border-color: 
- color-mix(in srgb, var(--danger-color) 50%, white);
-    color: 
- color-mix(in srgb, var(--danger-color) 90%, black);
+  background-color: color-mix(in srgb, var(--danger-color) 20%, white);
+  border-color: color-mix(in srgb, var(--danger-color) 50%, white);
+  color: color-mix(in srgb, var(--danger-color) 90%, black);
 }
 #disponible {
-background-color: 
- color-mix(in srgb, var(--primary-color) 20%, white);
-    border-color: 
- color-mix(in srgb, var(--primary-color) 50%, white);
-    color: 
- color-mix(in srgb, var(--primary-color) 90%, black);
+  background-color: color-mix(in srgb, var(--primary-color) 20%, white);
+  border-color: color-mix(in srgb, var(--primary-color) 50%, white);
+  color: color-mix(in srgb, var(--primary-color) 90%, black);
 }
-
 
 .table-button-container {
   text-align: center;
@@ -1754,7 +1885,6 @@ table tbody tr.paid {
   /* Remove default padding for color input */
 }
 
-
 /* Hamburguesa */
 .panel-header {
   display: flex;
@@ -1794,7 +1924,7 @@ table tbody tr.paid {
   margin-top: 10px;
 }
 
-@media(max-width: 1200px) {
+@media (max-width: 1200px) {
   .grid_card {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1899,12 +2029,12 @@ table tbody tr.paid {
     grid-template-columns: repeat(1, 1fr);
   }
 
-  .information{
+  .information {
     display: flex;
     flex-direction: column;
     gap: 15px;
-  padding: 5px;
-}
+    padding: 5px;
+  }
   .card-body {
     display: flex;
     flex-direction: column;
