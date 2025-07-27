@@ -229,7 +229,7 @@
               <button
                 v-if="boletas[boletaSeleccionada]?.status === 'reserved'"
                 @click="markAsPaid"
-                class="btn success"
+                class="btn_verde"
               >
                 <span>✅</span>
                 <span>Marcar como Pagada</span>
@@ -237,15 +237,15 @@
               <button
                 v-if="boletas[boletaSeleccionada]?.status !== 'available'"
                 @click="enableEditMode"
-                class="btn primary"
+                class="btn_azul"
               >
                 <span>✏️</span>
-                <span>Editar Datos</span>
+                <span>Editar Datoss</span>
               </button>
               <button
                 v-if="boletas[boletaSeleccionada]?.status === 'available'"
                 @click="assignTicket('paid')"
-                class="btn primary"
+                class="btn secondary"
               >
                 <span>💲</span>
                 <span>Asignar y Pagar</span>
@@ -253,7 +253,8 @@
               <button
                 v-if="boletas[boletaSeleccionada]?.status !== 'available'"
                 @click="releaseTicket"
-                class="btn danger"
+                class="btn_rojo"
+                style="bacbackground:red;"
               >
                 <span>↩️</span>
                 <span>Liberar Boleta</span>
@@ -320,7 +321,7 @@
             </table>
           </div>
           <div class="table-actions">
-            <button @click="downloadTicketsPDF" class="btn primary">
+            <button @click="downloadTicketsPDF" class="btn secondary">
               <span>⬇️</span>
               <span>Descargar PDF</span>
             </button>
@@ -332,40 +333,12 @@
     <div v-if="showSettingsModal" class="modal-overlay">
       <div class="modal-container">
         <div class="modal-header">
-          <h3>Configuración de la Aplicación</h3>
+          <h3>Configuración de los Colores Del Talonario</h3>
           <button @click="closeSettingsModal" class="close-btn">
             <span>✕</span>
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label for="primaryColor">Color Principal</label>
-            <input
-              type="color"
-              id="primaryColor"
-              v-model="themeColors.primary"
-            />
-          </div>
-          <div class="form-group">
-            <label for="secondaryColor">Color Secundario</label>
-            <input
-              type="color"
-              id="secondaryColor"
-              v-model="themeColors.secondary"
-            />
-          </div>
-          <div class="form-group">
-            <label for="successColor">Color Éxito</label>
-            <input
-              type="color"
-              id="successColor"
-              v-model="themeColors.success"
-            />
-          </div>
-          <div class="form-group">
-            <label for="dangerColor">Color Peligro</label>
-            <input type="color" id="dangerColor" v-model="themeColors.danger" />
-          </div>
           <div class="form-group">
             <label for="headerBgColor">Color de Fondo del Encabezado</label>
             <input
@@ -382,8 +355,38 @@
               v-model="themeColors.headerText"
             />
           </div>
+          
+          <div class="form-group">
+            <label for="secondaryColor">Colores De Botones</label>
+            <input
+              type="color"
+              id="secondaryColor"
+              v-model="themeColors.secondary"
+            />
+          </div>
+          <div class="form-group">
+            <label for="primaryColor">Color de Disponibles</label>
+            <input
+              type="color"
+              id="primaryColor"
+              v-model="themeColors.primary"
+            />
+          </div>
+          <div class="form-group">
+            <label for="successColor">Color de Pagadas</label>
+            <input
+              type="color"
+              id="successColor"
+              v-model="themeColors.success"
+            />
+          </div>
+          <div class="form-group">
+            <label for="dangerColor">Color de los apartadas</label>
+            <input type="color" id="dangerColor" v-model="themeColors.danger" />
+          </div>
+          
           <div class="action-buttons">
-            <button @click="saveThemeSettings" class="btn primary">
+            <button @click="saveThemeSettings" class="btn secondary">
               <span>💾</span>
               <span>Guardar Configuración</span>
             </button>
@@ -475,7 +478,81 @@
               </div>
             </div>
             <div class="card-footer">
-              <button class="secondary-btn" @click="editData">
+              <button
+                class="btn secondary"
+                data-bs-toggle="modal"
+                data-bs-target="#raffleModal"
+                :disabled="cantidadBoletas <= 0"
+              >
+                <i class="bi bi-ticket-perforated"></i> Realizar Sorteo
+              </button>
+
+              <!-- Modal de Bootstrap -->
+              <div
+                class="modal fade"
+                id="raffleModal"
+                tabindex="-1"
+                aria-labelledby="raffleModalLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                      <h5 class="modal-title" id="raffleModalLabel">
+                        Sorteo de Boletas
+                      </h5>
+                      <button
+                        type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body text-center">
+                      <div class="raffle-display mb-4">
+                        <transition name="bounce">
+                          <div
+                            v-if="numberWin > 0"
+                            class="winner-number display-1 fw-bold text-primary"
+                          >
+                            {{ numberWin }}
+                          </div>
+                          <div
+                            v-else
+                            class="placeholder-number display-1 fw-bold text-muted"
+                          >
+                            ?
+                          </div>
+                        </transition>
+                      </div>
+                      <p class="text-muted">
+                        Total de boletas: {{ cantidadBoletas }}
+                      </p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                      <button
+                        type="button"
+                        class="btn btn-danger px-4 py-2"
+                        @click="startRaffle"
+                        :disabled="isGenerating"
+                      >
+                        <span v-if="!isGenerating">
+                          <i class="bi bi-shuffle me-2"></i>Sortear
+                        </span>
+                        <span v-else>
+                          <span
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Buscando ganador...
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="btn secondary" @click="editData">
                 <span>✏️</span>
                 <span>Editar Datos</span>
               </button>
@@ -505,13 +582,12 @@
               </div>
             </section>
             <div class="table-button-container">
-              <button @click="openTicketsTableModal" class="btn info">
+              <button @click="openTicketsTableModal" class="btn secondary">
                 <span>📊</span>
                 <span>Ver Tabla de Boletas</span>
               </button>
             </div>
           </div>
-          
         </div>
 
         <div class="talonarionumber">
@@ -538,32 +614,92 @@ import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-// const numberWin = ref(0)
-// const showAnimation = ref(false)
-// const isGenerating = ref(false)
+const numberWin = ref(0);
+const isGenerating = ref(false);
 
 // Suponiendo que cantidadBoletas viene de props o store
- // Cambia esto según tu implementación
 
-// function generarnumber() {
-//   if (cantidadBoletas.value <= 0) return
-  
-//   isGenerating.value = true
-//   showAnimation.value = true
-  
-//   // Efecto de cuenta regresiva
-//   let counter = 0
-//   const interval = setInterval(() => {
-//     numberWin.value = Math.floor(Math.random() * cantidadBoletas.value) + 1
-//     counter++
-    
-//     if (counter > 10) {
-//       clearInterval(interval)
-//       isGenerating.value = false
-//       setTimeout(() => showAnimation.value = false, 2000)
-//     }
-//   }, 100)
-// }
+function startRaffle() {
+  if (cantidadBoletas.value <= 0) return;
+
+  // 1. Filtrar solo boletas pagadas o apartadas
+  const boletasParticipantes = sortedBoletasForTable.value.filter(
+    (ticket) => ticket.status === "paid" || ticket.status === "reserved"
+  );
+
+  if (boletasParticipantes.length === 0) {
+    Swal.fire({
+      icon: "error",
+      title: "No hay boletas participantes",
+      text: "No hay boletas pagadas o apartadas para el sorteo",
+    });
+    return;
+  }
+
+  isGenerating.value = true;
+  numberWin.value = 0;
+
+  // 2. Efecto de cuenta regresiva (solo entre boletas participantes)
+  let counter = 0;
+  const interval = setInterval(() => {
+    // Elige un índice aleatorio del array filtrado
+    const randomIndex = Math.floor(Math.random() * boletasParticipantes.length);
+    numberWin.value = boletasParticipantes[randomIndex].id; // Usamos el ID real
+
+    counter++;
+
+    if (counter > 20) {
+      clearInterval(interval);
+      isGenerating.value = false;
+      showWinnerAlert();
+    }
+  }, 100);
+}
+
+function showWinnerAlert() {
+  // Cierra el modal de Bootstrap
+  const modal = bootstrap.Modal.getInstance(
+    document.getElementById("raffleModal")
+  );
+  modal.hide();
+
+  // Busca la boleta ganadora usando el número ganador
+  const boletaGanadora = sortedBoletasForTable.value.find(
+    (ticket) => ticket.id === numberWin.value
+  );
+
+  // Muestra SweetAlert con el ganador
+  Swal.fire({
+    title: "¡Tenemos un ganador!",
+    html: `
+      <div class="display-4 text-primary my-4">Boleta #${numberWin.value}</div>
+      <p class="lead"><strong>Nombre:</strong> ${
+        boletaGanadora?.nombre || "No registrado"
+      }</p>
+      <p class="lead"><strong>Teléfono:</strong> ${
+        boletaGanadora?.telefono || "No registrado"
+      }</p>
+      <p class="lead">De un total de ${cantidadBoletas.value} boletas</p>
+      <p class="lead"><strong>Monto pagado:</strong> $${formatDecimal(
+        boletaGanadora?.montoPagado || 0
+      )}</p>
+    `,
+    icon: "success",
+    showConfirmButton: true,
+    confirmButtonText: "¡Genial!",
+    confirmButtonColor: "#3085d6",
+    background: "#f8f9fa",
+    backdrop: `
+      rgba(0,0,123,0.4)
+      url("/images/confetti.gif")
+      center top
+      no-repeat
+    `,
+    customClass: {
+      popup: "animated bounceIn",
+    },
+  });
+}
 
 // --- Estado de los modales ---
 const showWelcomeModal = ref(true);
@@ -599,10 +735,10 @@ const currentTicketData = ref({
 // --- Theme Customization ---
 const defaultThemeColors = {
   primary: "#3498db",
-  secondary: "#95a5a6",
+  secondary: "#3498db", ///para cambiar el color 
   success: "#2ecc71",
   danger: "#e74c3c",
-  headerBg: "white",
+  headerBg: "#3498db",
   headerText: "#333",
 };
 const themeColors = ref({ ...defaultThemeColors });
@@ -1083,30 +1219,69 @@ const showMenu = ref(false);
 
 
 <style scoped>
+.raffle-container {
+  text-align: center;
+  margin: 20px 0;
+}
 
+.raffle-button {
+  font-size: 1.1rem;
+  padding: 10px 25px;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
 
+.raffle-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
 
+.raffle-button:disabled {
+  opacity: 0.6;
+}
 
+.raffle-display {
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.winner-number {
+  animation: pulse 1s infinite alternate;
+}
 
+.placeholder-number {
+  opacity: 0.5;
+}
 
+/* Animaciones */
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+  }
+}
 
+.bounce-enter-active {
+  animation: bounce 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce 0.5s reverse;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@keyframes bounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
 
 .app-container {
   font-family: "Arial", sans-serif;
@@ -1115,7 +1290,7 @@ const showMenu = ref(false);
   color: #333;
   /* Define CSS variables for theme colors */
   --primary-color: #3498db;
-  --secondary-color: #95a5a6;
+  --secondary-color: #0101f8;
   --success-color: #2ecc71;
   --danger-color: #e74c3c;
   --header-bg-color: white;
@@ -1395,6 +1570,10 @@ button {
 }
 
 .card-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
   padding: 15px;
   text-align: right;
 }
@@ -1635,7 +1814,9 @@ button {
   transform: translateY(-50%);
   color: #7f8c8d;
 }
-
+.btn_rojo{background-color: red;color:white}
+.btn_azul{background-color: #3498db; color: white;}
+.btn_verde{background-color: #2ecc71;color: white;}
 .input-with-icon input,
 .select-with-icon select {
   width: 100%;
@@ -1784,7 +1965,7 @@ button {
 .talonarionumber {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  gap: 10px;
+  gap: 8px;
   padding: 20px;
   justify-items: center;
 }
@@ -2040,6 +2221,15 @@ table tbody tr.paid {
     flex-direction: column;
     padding: 10px;
     gap: 10px;
+  }
+
+  .card-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 15px;
+    text-align: right;
   }
 
   .analis {
