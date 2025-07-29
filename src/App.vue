@@ -22,12 +22,8 @@
             <label>Ingrese la Cantidad del Premio</label>
             <div class="input-with-icon">
               <span>🏆</span>
-              <input
-                v-model="premioDisplay"
-                type="text"
-                placeholder="No se valores Negativos"
-                @input="formatCurrency($event, 'premio')"
-              />
+              <input v-model="premioDisplay" type="text" placeholder="No se valores Negativos"
+                @input="formatCurrency($event, 'premio')" />
             </div>
           </div>
 
@@ -35,12 +31,8 @@
             <label>Ingrese el Valor de la Boleta</label>
             <div class="input-with-icon">
               <span>🎫</span>
-              <input
-                v-model="precioUnitarioDisplay"
-                type="text"
-                placeholder="No se valores Negativos"
-                @input="formatCurrency($event, 'precioUnitario')"
-              />
+              <input v-model="precioUnitarioDisplay" type="text" placeholder="No se valores Negativos"
+                @input="formatCurrency($event, 'precioUnitario')" />
             </div>
           </div>
 
@@ -89,10 +81,7 @@
     </div>
 
     <div v-if="showAssignTicketModal" class="modal-overlay">
-      <div
-        class="modal-container"
-        :class="`${boletas[boletaSeleccionada]?.status || 'available'}-modal`"
-      >
+      <div class="modal-container" :class="`${boletas[boletaSeleccionada]?.status || 'available'}-modal`">
         <div class="modal-header">
           <h3>
             Asignar Boleta #{{
@@ -107,11 +96,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <div
-            v-if="
-              boletas[boletaSeleccionada]?.status !== 'available' && !isEditing
-            "
-          >
+          <div v-if="
+            boletas[boletaSeleccionada]?.status !== 'available' && !isEditing
+          ">
             <div class="participant-info">
               <h4>Datos del Participante</h4>
               <div class="info-grid">
@@ -138,72 +125,47 @@
             <div class="payment-info">
               <p v-if="boletas[boletaSeleccionada]?.status === 'reserved'">
                 <span>Pendiente por Pagar:</span>
-                <span
-                  >₡{{
-                    formatDecimal(
-                      precioUnitario -
-                        (boletas[boletaSeleccionada]?.montoPagado || 0)
-                    )
-                  }}</span
-                >
+                <span>₡{{
+                  formatDecimal(
+                    precioUnitario -
+                    (boletas[boletaSeleccionada]?.montoPagado || 0)
+                  )
+                }}</span>
               </p>
             </div>
           </div>
 
-          <div
-            v-if="
-              boletas[boletaSeleccionada]?.status === 'available' || isEditing
-            "
-            class="form-container"
-          >
+          <div v-if="
+            boletas[boletaSeleccionada]?.status === 'available' || isEditing
+          " class="form-container">
             <div class="form-group">
               <label for="nombre">Nombre del Participante</label>
               <div class="input-with-icon">
                 <span>👤</span>
-                <input
-                  type="text"
-                  id="nombre"
-                  v-model="currentTicketData.nombre"
-                  placeholder="Nombre completo"
-                />
+                <input type="text" id="nombre" v-model="currentTicketData.nombre" placeholder="Nombre completo" />
               </div>
             </div>
             <div class="form-group">
               <label for="telefono">Teléfono</label>
               <div class="input-with-icon">
                 <span>📱</span>
-                <input
-                  type="text"
-                  id="telefono"
-                  v-model="currentTicketData.telefono"
-                  placeholder="Número de teléfono"
-                  maxlength="10"
-                  inputmode="numeric"
-                  @input="
+                <input type="text" id="telefono" v-model="currentTicketData.telefono" placeholder="Número de teléfono"
+                  maxlength="10" inputmode="numeric" @input="
                     currentTicketData.telefono = currentTicketData.telefono
                       .replace(/\D/g, '')
                       .slice(0, 10)
-                  "
-                />
+                    " />
               </div>
             </div>
             <div class="form-group">
               <label for="direccion">Direccion</label>
               <div class="input-with-icon">
                 <span>🌏</span>
-                <input
-                  type="text"
-                  id="direccion"
-                  v-model="currentTicketData.direccion"
-                  placeholder="Direccion"
-                />
+                <input type="text" id="direccion" v-model="currentTicketData.direccion" placeholder="Direccion" />
               </div>
             </div>
           </div>
-          <div
-            v-if="isEditing"
-            style="display: flex; gap: 10px; justify-content: end"
-          >
+          <div v-if="isEditing" style="display: flex; gap: 10px; justify-content: end">
             <button @click="isEditing = false" class="btn secondary">
               <span>✕</span>
               <span>Cancelar</span>
@@ -218,44 +180,27 @@
 
             <div style="display: flex; gap: 10px">
               <!--v-else -->
-              <button
-                v-if="boletas[boletaSeleccionada]?.status === 'available'"
-                @click="assignTicket('reserved')"
-                class="btn secondary"
-              >
+              <button v-if="boletas[boletaSeleccionada]?.status === 'available'" @click="assignTicket('reserved')"
+                class="btn secondary">
                 <span>🔖</span>
                 <span>Apartar</span>
               </button>
-              <button
-                v-if="boletas[boletaSeleccionada]?.status === 'reserved'"
-                @click="markAsPaid"
-                class="btn_verde"
-              >
+              <button v-if="boletas[boletaSeleccionada]?.status === 'reserved'" @click="markAsPaid" class="btn_verde">
                 <span>✅</span>
                 <span>Marcar como Pagada</span>
               </button>
-              <button
-                v-if="boletas[boletaSeleccionada]?.status !== 'available'"
-                @click="enableEditMode"
-                class="btn_azul"
-              >
+              <button v-if="boletas[boletaSeleccionada]?.status !== 'available'" @click="enableEditMode"
+                class="btn_azul">
                 <span>✏️</span>
                 <span>Editar Datoss</span>
               </button>
-              <button
-                v-if="boletas[boletaSeleccionada]?.status === 'available'"
-                @click="assignTicket('paid')"
-                class="btn secondary"
-              >
+              <button v-if="boletas[boletaSeleccionada]?.status === 'available'" @click="assignTicket('paid')"
+                class="btn secondary">
                 <span>💲</span>
                 <span>Asignar y Pagar</span>
               </button>
-              <button
-                v-if="boletas[boletaSeleccionada]?.status !== 'available'"
-                @click="releaseTicket"
-                class="btn_rojo"
-                style="bacbackground:red;"
-              >
+              <button v-if="boletas[boletaSeleccionada]?.status !== 'available'" @click="releaseTicket" class="btn_rojo"
+                style="bacbackground:red;">
                 <span>↩️</span>
                 <span>Liberar Boleta</span>
               </button>
@@ -287,11 +232,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(ticket, index) in sortedBoletasForTable"
-                  :key="index"
-                  :class="ticket.status"
-                >
+                <tr v-for="(ticket, index) in sortedBoletasForTable" :key="index" :class="ticket.status">
                   <td>#{{ ticket.id }}</td>
                   <td>{{ ticket.status }}</td>
                   <td>{{ ticket.nombre }}</td>
@@ -341,50 +282,30 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="headerBgColor">Color de Fondo del Encabezado</label>
-            <input
-              type="color"
-              id="headerBgColor"
-              v-model="themeColors.headerBg"
-            />
+            <input type="color" id="headerBgColor" v-model="themeColors.headerBg" />
           </div>
           <div class="form-group">
             <label for="headerTextColor">Color de Texto del Encabezado</label>
-            <input
-              type="color"
-              id="headerTextColor"
-              v-model="themeColors.headerText"
-            />
+            <input type="color" id="headerTextColor" v-model="themeColors.headerText" />
           </div>
-          
+
           <div class="form-group">
             <label for="secondaryColor">Colores De Botones</label>
-            <input
-              type="color"
-              id="secondaryColor"
-              v-model="themeColors.secondary"
-            />
+            <input type="color" id="secondaryColor" v-model="themeColors.secondary" />
           </div>
           <div class="form-group">
             <label for="primaryColor">Color de Disponibles</label>
-            <input
-              type="color"
-              id="primaryColor"
-              v-model="themeColors.primary"
-            />
+            <input type="color" id="primaryColor" v-model="themeColors.primary" />
           </div>
           <div class="form-group">
             <label for="successColor">Color de Pagadas</label>
-            <input
-              type="color"
-              id="successColor"
-              v-model="themeColors.success"
-            />
+            <input type="color" id="successColor" v-model="themeColors.success" />
           </div>
           <div class="form-group">
             <label for="dangerColor">Color de los apartadas</label>
             <input type="color" id="dangerColor" v-model="themeColors.danger" />
           </div>
-          
+
           <div class="action-buttons">
             <button @click="saveThemeSettings" class="btn secondary">
               <span>💾</span>
@@ -400,19 +321,13 @@
     </div>
 
     <div class="main-panel" v-if="!showWelcomeModal && !showDataModal">
-      <header
-        class="panel-header"
-        :style="{
-          backgroundColor: themeColors.headerBg,
-          color: themeColors.headerText,
-        }"
-      >
+      <header class="panel-header" :style="{
+        backgroundColor: themeColors.headerBg,
+        color: themeColors.headerText,
+      }">
         <div class="header-left" style="padding-top: 10px">
           <h1>{{ sorteo || "Nombre de la Rifa" }}</h1>
-          <div
-            class="badge active"
-            :style="{ backgroundColor: themeColors.success }"
-          >
+          <div class="badge active" :style="{ backgroundColor: themeColors.success }">
             Activo
           </div>
         </div>
@@ -446,10 +361,7 @@
           <div v-if="datosGuardados" class="data-card">
             <div class="card-header">
               <h4>Informacion del Sorteo</h4>
-              <div
-                class="badge success"
-                :style="{ backgroundColor: themeColors.success }"
-              >
+              <div class="badge success" :style="{ backgroundColor: themeColors.success }">
                 Guardado
               </div>
             </div>
@@ -460,9 +372,7 @@
               </div>
               <div class="data-row">
                 <span class="data-label">Valor boleta:</span>
-                <span class="data-value"
-                  >${{ formatDecimal(precioUnitario) }}</span
-                >
+                <span class="data-value">${{ formatDecimal(precioUnitario) }}</span>
               </div>
               <div class="data-row">
                 <span class="data-label">Lotería:</span>
@@ -478,49 +388,30 @@
               </div>
             </div>
             <div class="card-footer">
-              <button
-                class="btn secondary"
-                data-bs-toggle="modal"
-                data-bs-target="#raffleModal"
-                :disabled="cantidadBoletas <= 0"
-              >
+              <button class="btn secondary" data-bs-toggle="modal" data-bs-target="#raffleModal"
+                :disabled="cantidadBoletas <= 0">
                 <i class="bi bi-ticket-perforated"></i> Realizar Sorteo
               </button>
 
               <!-- Modal de Bootstrap -->
-              <div
-                class="modal fade"
-                id="raffleModal"
-                tabindex="-1"
-                aria-labelledby="raffleModalLabel"
-                aria-hidden="true"
-              >
+              <div class="modal fade" id="raffleModal" tabindex="-1" aria-labelledby="raffleModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
                       <h5 class="modal-title" id="raffleModalLabel">
                         Sorteo de Boletas
                       </h5>
-                      <button
-                        type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
                       <div class="raffle-display mb-4">
                         <transition name="bounce">
-                          <div
-                            v-if="numberWin > 0"
-                            class="winner-number display-1 fw-bold text-primary"
-                          >
+                          <div v-if="numberWin > 0" class="winner-number display-1 fw-bold text-primary">
                             {{ numberWin }}
                           </div>
-                          <div
-                            v-else
-                            class="placeholder-number display-1 fw-bold text-muted"
-                          >
+                          <div v-else class="placeholder-number display-1 fw-bold text-muted">
                             ?
                           </div>
                         </transition>
@@ -530,21 +421,13 @@
                       </p>
                     </div>
                     <div class="modal-footer justify-content-center">
-                      <button
-                        type="button"
-                        class="btn btn-danger px-4 py-2"
-                        @click="startRaffle"
-                        :disabled="isGenerating"
-                      >
+                      <button type="button" class="btn btn-danger px-4 py-2" @click="startRaffle"
+                        :disabled="isGenerating">
                         <span v-if="!isGenerating">
                           <i class="bi bi-shuffle me-2"></i>Sortear
                         </span>
                         <span v-else>
-                          <span
-                            class="spinner-border spinner-border-sm me-2"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
+                          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                           Buscando ganador...
                         </span>
                       </button>
@@ -591,15 +474,10 @@
         </div>
 
         <div class="talonarionumber">
-          <button
-            v-for="i in Array.from(
-              { length: cantidadBoletas },
-              (_, index) => index
-            )"
-            :key="i"
-            :class="['number', boletas[i]?.status || 'available']"
-            @click="openAssignTicketModal(i)"
-          >
+          <button v-for="i in Array.from(
+            { length: cantidadBoletas },
+            (_, index) => index
+          )" :key="i" :class="['number', boletas[i]?.status || 'available']" @click="openAssignTicketModal(i)">
             #{{ i.toString().padStart(boletaDigits, "0") }}
           </button>
         </div>
@@ -673,11 +551,9 @@ function showWinnerAlert() {
     title: "¡Tenemos un ganador!",
     html: `
       <div class="display-4 text-primary my-4">Boleta #${numberWin.value}</div>
-      <p class="lead"><strong>Nombre:</strong> ${
-        boletaGanadora?.nombre || "No registrado"
+      <p class="lead"><strong>Nombre:</strong> ${boletaGanadora?.nombre || "No registrado"
       }</p>
-      <p class="lead"><strong>Teléfono:</strong> ${
-        boletaGanadora?.telefono || "No registrado"
+      <p class="lead"><strong>Teléfono:</strong> ${boletaGanadora?.telefono || "No registrado"
       }</p>
       <p class="lead">De un total de ${cantidadBoletas.value} boletas</p>
       <p class="lead"><strong>Monto pagado:</strong> $${formatDecimal(
@@ -942,9 +818,8 @@ const assignTicket = (status) => {
     icon: "success",
     title: `Boleta #${boletaSeleccionada.value
       .toString()
-      .padStart(boletaDigits.value, "0")} ha sido ${
-      status === "reserved" ? "apartada" : "pagada"
-    }!`,
+      .padStart(boletaDigits.value, "0")} ha sido ${status === "reserved" ? "apartada" : "pagada"
+      }!`,
     showConfirmButton: false,
     timer: 1500,
   });
@@ -1066,17 +941,65 @@ function formatCurrencyForModal(event, field) {
 }
 
 function guardarDatos() {
-  if (
-    premio.value <= 0 ||
-    precioUnitario.value <= 0 ||
-    !sorteo.value ||
-    cantidadBoletas.value <= 0 ||
-    !fechaSorteo.value
-  ) {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const fechaMinima = new Date(hoy);
+  fechaMinima.setDate(hoy.getDate() + 3);
+
+  // Validaciones individuales
+  if (!premio.value || premio.value <= 0) {
     Swal.fire({
       icon: "error",
-      title: "Oops...",
-      text: "Por favor, complete todos los campos con valores válidos.",
+      title: "Premio inválido",
+      text: "El valor del premio debe ser mayor a 0.",
+    });
+    return;
+  }
+
+  if (!precioUnitario.value || precioUnitario.value <= 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Precio inválido",
+      text: "El valor de la boleta debe ser mayor a 0.",
+    });
+    return;
+  }
+
+  if (!sorteo.value) {
+    Swal.fire({
+      icon: "error",
+      title: "Nombre del sorteo requerido",
+      text: "Por favor, ingrese el nombre del sorteo.",
+    });
+    return;
+  }
+
+  if (!cantidadBoletas.value || cantidadBoletas.value <= 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Cantidad inválida",
+      text: "La cantidad de boletas debe ser mayor a 0.",
+    });
+    return;
+  }
+
+  if (!fechaSorteo.value) {
+    Swal.fire({
+      icon: "error",
+      title: "Fecha requerida",
+      text: "Debe seleccionar una fecha para el sorteo.",
+    });
+    return;
+  }
+
+  const fechaSeleccionada = new Date(fechaSorteo.value);
+
+  if (fechaSeleccionada <= fechaMinima) {
+    Swal.fire({
+      icon: "error",
+      title: "Fecha inválida",
+      text: "La fecha del sorteo debe ser al menos 3 días después de hoy.",
     });
     return;
   }
@@ -1261,6 +1184,7 @@ const showMenu = ref(false);
   from {
     transform: scale(1);
   }
+
   to {
     transform: scale(1.1);
   }
@@ -1269,15 +1193,18 @@ const showMenu = ref(false);
 .bounce-enter-active {
   animation: bounce 0.5s;
 }
+
 .bounce-leave-active {
   animation: bounce 0.5s reverse;
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.2);
   }
@@ -1628,11 +1555,9 @@ button {
 }
 
 .welcome-modal-content button {
-  background: linear-gradient(
-    to right,
-    var(--primary-color),
-    var(--success-color)
-  );
+  background: linear-gradient(to right,
+      var(--primary-color),
+      var(--success-color));
   color: white;
   border: none;
   padding: 12px 30px;
@@ -1710,6 +1635,7 @@ button {
 .paid-modal .modal-status {
   background-color: var(--success-color);
 }
+
 #title {
   font-size: 2.5rem;
   font-weight: 700;
@@ -1814,9 +1740,22 @@ button {
   transform: translateY(-50%);
   color: #7f8c8d;
 }
-.btn_rojo{background-color: red;color:white}
-.btn_azul{background-color: #3498db; color: white;}
-.btn_verde{background-color: #2ecc71;color: white;}
+
+.btn_rojo {
+  background-color: red;
+  color: white
+}
+
+.btn_azul {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn_verde {
+  background-color: #2ecc71;
+  color: white;
+}
+
 .input-with-icon input,
 .select-with-icon select {
   width: 100%;
@@ -1830,8 +1769,7 @@ button {
 .input-with-icon input:focus,
 .select-with-icon select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--primary-color) 30%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 30%, transparent);
   outline: none;
 }
 
@@ -1945,11 +1883,13 @@ button {
   border-color: color-mix(in srgb, var(--success-color) 50%, white);
   color: color-mix(in srgb, var(--success-color) 90%, black);
 }
+
 #apartadas {
   background-color: color-mix(in srgb, var(--danger-color) 20%, white);
   border-color: color-mix(in srgb, var(--danger-color) 50%, white);
   color: color-mix(in srgb, var(--danger-color) 90%, black);
 }
+
 #disponible {
   background-color: color-mix(in srgb, var(--primary-color) 20%, white);
   border-color: color-mix(in srgb, var(--primary-color) 50%, white);
@@ -2216,6 +2156,7 @@ table tbody tr.paid {
     gap: 15px;
     padding: 5px;
   }
+
   .card-body {
     display: flex;
     flex-direction: column;
